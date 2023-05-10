@@ -6,6 +6,7 @@ miniChatGPT基于Huggingface GPT2，支持有监督微调(SFT)、奖励模型(Re
 2. 使用train_sft.py进行有监督微调(SFT)
 3. 使用train_rm.py训练奖励模型(Reward Model)
 4. 基于奖励模型，使用train_ppo.py对SFT模型进行进一步PPO训练
+5. 运行main.py检查模型运行效果
 
 ## 致谢
 本项目是对[minChatGPT](https://github.com/ethanyanjiali/minChatGPT)的修改和完善，感谢minChatGPT的辛勤工作。
