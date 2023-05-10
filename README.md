@@ -1,5 +1,5 @@
 # miniChatGPT
-Mini ChatGPT基于Huggingface GPT2，支持有监督微调(SFT)、奖励模型(Reward Model)和PPO全流程ChatGPT训练。
+miniChatGPT基于Huggingface GPT2，支持有监督微调(SFT)、奖励模型(Reward Model)和PPO全流程ChatGPT训练。
 
 ## 如何使用
 1. 使用prepare_sft_dataset.py准备训练数据
