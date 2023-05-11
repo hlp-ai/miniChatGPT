@@ -9,7 +9,10 @@ from tokenizer import TiktokenTokenizer
 
 
 class DahoasSFTStaticPromptsDataset(Dataset):
-    """A prompt dataset"""
+    """A prompt dataset used for PPO
+
+    https://huggingface.co/datasets/Dahoas/rm-static
+    """
 
     def __init__(self,
                  block_size,
@@ -48,10 +51,11 @@ class DahoasSFTStaticPromptsDataset(Dataset):
         return len(self.prompts)
 
     def __getitem__(self, idx):
-        return self.prompts[idx][0], self.prompts[idx][1], self.prompts[idx][2]  # (1, T), (1, T)
+        return self.prompts[idx][0], self.prompts[idx][1], self.prompts[idx][2]
 
 
 class EYLSFTStaticDataset(Dataset):
+    """SFT dataset"""
 
     def __init__(self,
                  block_size,
@@ -100,56 +104,10 @@ class EYLSFTStaticDataset(Dataset):
         return x, y
 
 
-class DahoasSFTStaticDataset(IterableDataset):
-    """
-    https://huggingface.co/datasets/Dahoas/sft-static
-    """
-
-    def __init__(self,
-                 block_size,
-                 split='train',
-                 max_examples=None,
-                 tokenizer_name='tiktoken/gpt2') -> None:
-        super().__init__()
-        dataset = load_dataset(
-            "Dahoas/sft-static",
-            revision="90e35d9cd625075f1224c4241734716ec9f0db78",
-            split=split)
-        self.tokens = []
-        self.block_size = block_size
-
-        if tokenizer_name == "huggingface/gpt2":
-            tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-            tokenizer.pad_token = tokenizer.eos_token
-        elif tokenizer_name == "huggingface/gpt2fast":
-            tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
-        elif tokenizer_name == "tiktoken/gpt2":
-            tokenizer = TiktokenTokenizer('gpt2')
-
-        cnt = 0
-        print(f"Loading DahoasSFTStaticDataset {split} split")
-        for data in dataset:
-            cnt += 1
-            prompt = data['prompt']
-
-            response_text = prompt + data['response'] + "<|endoftext|>"
-            response = tokenizer(response_text)
-
-            self.tokens += response['input_ids']
-            if max_examples and cnt >= max_examples:
-                break
-
-        self.tokens = torch.tensor(self.tokens, dtype=torch.long)
-
-    def __iter__(self):
-        start = random.randint(0, len(self.tokens) - self.block_size - 2)
-        x = self.tokens[start:start + self.block_size]
-        y = self.tokens[start + 1:start + self.block_size + 1]
-        yield x, y
-
-
 class DahoasRMStaticDataset(Dataset):
-    """
+    """ RM dataset
+    It contain positive and negative examples.
+
     https://huggingface.co/datasets/Dahoas/rm-static
     """
 
@@ -204,6 +162,7 @@ class DahoasRMStaticDataset(Dataset):
 
     @classmethod
     def save(cls, split, fp):
+        """Choose data for SFT"""
         dataset = load_dataset("Dahoas/rm-static", split=split)
         examples = []
         for data in tqdm(dataset):
@@ -215,7 +174,7 @@ class DahoasRMStaticDataset(Dataset):
         return len(self.pairs)
 
     def __getitem__(self, idx):
-        return self.pairs[idx], self.masks[idx]  # (2, T), (2, T)
+        return self.pairs[idx], self.masks[idx]
 
 
 class AnthropicHHRLHFDataset(Dataset):

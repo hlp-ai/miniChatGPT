@@ -431,8 +431,7 @@ class RewardModelTrainer(Trainer):
 
         for epoch in range(self.total_epochs):
             opt_model.train()
-            for step, (completions, attention_masks) in enumerate(
-                pbar := tqdm(self.train_dataloader)):
+            for step, (completions, attention_masks) in enumerate(pbar := tqdm(self.train_dataloader)):
                 total_steps = step + epoch * len(self.train_dataloader)
                 completions = completions.to(self.device)
                 attention_masks = attention_masks.to(self.device)
