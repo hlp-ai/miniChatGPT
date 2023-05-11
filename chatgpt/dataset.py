@@ -9,6 +9,7 @@ from tokenizer import TiktokenTokenizer
 
 
 class DahoasSFTStaticPromptsDataset(Dataset):
+    """A prompt dataset"""
 
     def __init__(self,
                  block_size,
