@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset, IterableDataset
+from torch.utils.data import Dataset
 from datasets import load_dataset
 from transformers import GPT2Tokenizer, GPT2TokenizerFast
 import torch
@@ -240,4 +240,4 @@ class AnthropicHHRLHFDataset(Dataset):
         return len(self.pairs)
 
     def __getitem__(self, idx):
-        return self.pairs[idx], self.masks[idx]  # (2, T), (2, T)
+        return self.pairs[idx], self.masks[idx]
