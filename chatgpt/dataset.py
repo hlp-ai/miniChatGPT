@@ -43,15 +43,6 @@ class DahoasSFTStaticPromptsDataset(Dataset):
             if max_examples and cnt >= max_examples:
                 break
 
-    @classmethod
-    def save(cls, split, fp):
-        dataset = load_dataset("fka/awesome-chatgpt-prompts", split=split)
-        examples = []
-        for data in tqdm(dataset):
-            examples.append(data["prompt"])
-        import json
-        json.dump(examples, fp)
-
     def __len__(self):
         return len(self.prompts)
 
