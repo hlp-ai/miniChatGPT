@@ -11,8 +11,10 @@ class TrainingConfig:
     use_bias: bool
     block_size: int
     vocab_size: int
-    model_name: str
-    hf_model: str
+
+    model_name: str  # internal model name
+    hf_model: str  # huggingface model name
+
     grad_clip: float = 1.0
     exp_name: str = ""
     batch_size: int = 1
@@ -97,7 +99,7 @@ def get_configs(name) -> TrainingConfig:
             n_layers=36,
             n_heads=20,
             embedding_dim=1280,
-            dropout_rate=0,
+            dropout_rate=0.2,
             use_bias=True,
             block_size=1024,
             vocab_size=50257,
