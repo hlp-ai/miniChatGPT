@@ -45,6 +45,7 @@ Assitant:"""
         cfg = get_configs("gpt2-medium")
         model = GPT.from_pretrained(cfg)
         generate_gpt2(model, prompt, device, samples=10)
+
     elif task == "unwrap_gpt":
         prompt = """Human: Hello, my name is Kate. What is your name?
 Assitant:"""
@@ -66,6 +67,7 @@ Assitant:"""
                 'model_state_dict': inner_model.state_dict(),
                 'optimizer_state_dict': checkpoint['optimizer_state_dict'],
             }, ckpt_path + new_file)
+
     elif task == "gpt_sft":
         prompt = """Human: You are an asshole! You are an idiot!
 Assitant:"""
@@ -77,6 +79,7 @@ Assitant:"""
         # model = GPT.from_checkpoint(
         #     cfg, "./runs/sft_1678085469/original_sft_1678085469_step100000.pt")
         generate_gpt2(model, prompt, device, samples=10)
+
     elif task == 'llama':
         num_samples = 3
         max_new_tokens = 300
@@ -118,6 +121,7 @@ Sentiment:"""
                 y = model.generate(x, max_new_tokens)
                 print(tokenizer.decode(y[0].tolist()))
                 print('---------------')
+
     elif task == "reward":
         prompt = """Human: Hello, my name is Kate. What is your name?
 Assitant:"""
@@ -128,6 +132,7 @@ Assitant:"""
         rm.to(device)
         score = rm(x)
         print(score)
+
     elif task == "reward_sft":
         prompt = """Human: Hello, my name is Kate. What is your name?
 Assitant:"""
@@ -139,16 +144,19 @@ Assitant:"""
         rm.to(device)
         score = rm(x)
         print(score)
+
     elif task == "dataset":
         from datasets import load_dataset
         dataset = load_dataset("Anthropic/hh-rlhf", split='train')
         print(dataset[0])
+
     elif task == "test_loss":
         from loss import KPairwiseLoss
         loss_func = KPairwiseLoss()
         scores = torch.tensor([[0.8, 0.4], [0.5, 0.6]])
         loss = loss_func(scores)
         print(loss)
+
     elif task == "test_tokenizer":
         from dataset import TiktokenTokenizer
         from transformers import GPT2Tokenizer, GPT2TokenizerFast
